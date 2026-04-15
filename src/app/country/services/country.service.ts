@@ -20,16 +20,28 @@ searchByCapital(query:string): Observable<Country[]>{
 
   return this.http.get<RESTCountry[]>(`${API_URL}/capital/${query}`)
   .pipe(
-    map((restcountries)=>{
-      //TODO: revisar por que 
-      return CountryMapper.mapRestCountryArrayToCountryArray(restcountries)
-      //  catchError((error)=>{
-      //   return throwError(
-      //     () => new Error('no se pudo obtener pais')
-      //   )
-      // })
-    })
+    map((restcountries) =>
+      CountryMapper.mapRestCountryArrayToCountryArray(restcountries)
+    ),
+    catchError(() =>
+      throwError(() => new Error('No se pudo obtener paises'))
+    )
   )
+} // método corregido(arriba), la referencia al mal formado (abajo) :
+// return this.http.get<RESTCountry[]>(`${API_URL}/capital/${query}`)
+//   .pipe(
+//     map((restcountries)=>{
+//       //TODO: revisar por que 
+//       return CountryMapper.mapRestCountryArrayToCountryArray(restcountries)
+//       //  catchError((error)=>{
+//       //   return throwError(
+//       //     () => new Error('no se pudo obtener pais')
+//       //   )
+//       // })
+
+
+searchByCountry(query: string){
+  //const url = `${API_URL}/name/${query}`;
 }
 
 }
