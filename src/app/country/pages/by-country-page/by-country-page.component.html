@@ -6,9 +6,8 @@ placeholder="Buscar por País"
 <!-- country-list -->
 
 <country-list 
-[countries]="countryResource.value() ?? []"
-[errorMessage]="countryResource.error()"
-[isEmpty]="countryResource.value()?.length === 0"
+[countries]="countryResource.hasValue() ? countryResource.value()! : []"
+[errorMessage]="countryResource.error()?.message ?? null"
 [isLoading]="countryResource.isLoading()"
 />
 <!-- @if (countryResource.error()) {
