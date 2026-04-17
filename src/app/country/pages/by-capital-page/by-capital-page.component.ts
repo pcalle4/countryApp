@@ -3,7 +3,8 @@ import { SearchInputComponent } from "../../components/search-input/search-input
 import { CoiuntryListComponent } from "../../components/coiuntry-list.component/coiuntry-list.component";
 import { CountryService } from '../../services/country.service';
 import { Country } from '../../interfaces/country.interfaces';
-import { firstValueFrom } from 'rxjs';
+import { of } from 'rxjs';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'by-capital',
@@ -15,16 +16,29 @@ export class ByCapitalPageComponent {
   countryService = inject(CountryService)
   query = signal('');
 
-  countryResource = resource({
+  //espera un stream que devuelve un observable
+    countryResource = rxResource({
     params: () => ({query: this.query()}),
-    loader: async({params}) =>{
-      if(!params.query) return [];
-
-      return await firstValueFrom(
-      this.countryService.searchByCapital(params.query)
-      )
+    stream: ({params}) =>{ 
+      if(!params.query){
+        return of([])
+      }
+      return this.countryService.searchByCapital(params.query)
     }
-  })
+  });
+
+
+  //resource espera un loader asincrono que devuelva un valor a señal
+  // countryResource = resource({
+  //   params: () => ({query: this.query()}),
+  //   loader: async({params}) =>{
+  //     if(!params.query) return [];
+
+  //     return await firstValueFrom(
+  //     this.countryService.searchByCapital(params.query)
+  //     )
+  //   }
+  // })
 
 
   // isLoading = signal(false)
